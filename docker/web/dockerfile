@@ -4,16 +4,35 @@ RUN yum -y update && yum clean all
 # epelインストール
 RUN yum install -y epel-release && yum clean all
 
-# gitインストール
-RUN yum install wget
-RUN yum install git
+# wget, which,gitインストール
+RUN yum -y install wget
+RUN yum -y install git
+RUN yum -y install which
 
-
+# httpdインストール
 RUN yum -y install httpd && yum clean all
 RUN systemctl enable httpd 
-
+# php, composerインストール
 RUN yum -y install http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 RUN yum -y install --enablerepo=remi,remi-php74 php php-devel php-mbstring php-pdo php-xml php-gd php-fpm php-mysqlnd php-opcache php-pecl-zip libzip5 php-pecl-zip composer
- 
+
+# node インストール
+RUN curl -sL https://rpm.nodesource.com/setup_17.x | bash -
+RUN yum -y install curl && yum clean all
+RUN yum -y install nodejs
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.30.1/install.sh | bash \
+    && source ~/.bash_profile 
+
+# laravelプロジェクト生成
+RUN mkdir /docker && \
+    cd /docker && \
+    composer create-project --prefer-dist laravel/laravel laravel
+
+# ドキュメントルートにシンボリックリンクを設定
+RUN ln /docker/laravel/public /var/www/ -s
+
+# ドキュメントルート変更
+RUN sed -ie 's/\/var\/www\/html/\/var\/www\/\public/g' /etc/httpd/conf/httpd.conf
+
 
 CMD ["/sbin/init"]

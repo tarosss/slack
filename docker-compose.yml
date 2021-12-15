@@ -1,7 +1,7 @@
 version: '3.7'
 services: 
   web:
-    build: "./"
+    build: "./docker/web"
     container_name: "centos"
     ports:
       - 80:80
@@ -10,5 +10,4 @@ services:
       - ".html/:/var/www/html"
       - "./:/docker"
     privileged: true
-  database:
-    
+  # database:
