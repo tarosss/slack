@@ -1,0 +1,14 @@
+version: '3.7'
+services: 
+  web:
+    build: "./"
+    container_name: "centos"
+    ports:
+      - 80:80
+      - 6001:6001
+    volumes:
+      - ".html/:/var/www/html"
+      - "./:/docker"
+    privileged: true
+  database:
+    
