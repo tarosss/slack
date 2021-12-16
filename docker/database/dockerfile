@@ -1,3 +1,25 @@
 FROM centos:7
+# centosアップデート
+RUN yum -y update $$ \
+    yum upgrade
 
-RUN yum localinstall http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+# RUN yum -y localinstall http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm $$ \
+#     # yum-config-manager --enable mysql57-community && \ 
+#     yum -y install mysql mysql-devel mysql-server && \
+#     yum -y install mysql mysql-utilities
+
+RUN yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm && \
+    yum install -y mysql-community-server
+
+# mysqlインストール
+# RUN yum install -y mysql-community-server
+
+# 自動起動
+RUN systemctl enable mysqld.service
+# 起動
+# RUN systemctl start mysqld.service
+
+EXPOSE 22
+
+
+CMD ["/sbin/init"]

@@ -10,4 +10,15 @@ services:
       - ".html/:/var/www/html"
       - "./:/docker"
     privileged: true
-  # database:
+
+  database:
+    build: "./docker/database"
+    container_name: "database"
+    ports:
+      - 3306:3306
+      - "2222:22"
+
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    # command: --default-authentication-plugin=mysql_native_password
+    privileged: true
